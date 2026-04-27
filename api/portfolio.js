@@ -1,42 +1,39 @@
-import express from "express";
-import dotenv from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const currentFilePath = fileURLToPath(import.meta.url);
-const currentDirPath = path.dirname(currentFilePath);
-
-dotenv.config({ path: path.join(currentDirPath, ".env") });
-
-const app = express();
-app.use(express.json({ limit: "100kb" }));
-
-const rawPort = process.env.PROXY_PORT ?? "8787";
-const parsedPort = Number.parseInt(rawPort, 10);
-const port = Number.isNaN(parsedPort) || parsedPort <= 0 ? 8787 : parsedPort;
-
 const getWebhookUrl = () =>
     (process.env.GOOGLE_SHEETS_WEBHOOK_URL ?? "").trim();
 
-app.get("/health", (_req, res) => {
-    res.json({ ok: true, service: "portfolio-proxy" });
-});
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        res.setHeader("Allow", "POST");
+        return res
+            .status(405)
+            .json({ ok: false, error: "Method not allowed." });
+    }
 
-app.post("/api/portfolio", async (req, res) => {
     const webhookUrl = getWebhookUrl();
     if (!webhookUrl) {
         return res.status(500).json({
             ok: false,
-            error: "Missing GOOGLE_SHEETS_WEBHOOK_URL in server environment.",
+            error: "Missing GOOGLE_SHEETS_WEBHOOK_URL in Vercel environment.",
         });
     }
+
+    const body =
+        req.body && typeof req.body === "object"
+            ? req.body
+            : (() => {
+                  try {
+                      return JSON.parse(req.body ?? "{}");
+                  } catch {
+                      return {};
+                  }
+              })();
 
     const {
         music_link = "",
         bottleneck = "",
         commitment = "",
         submitted_at = new Date().toISOString(),
-    } = req.body ?? {};
+    } = body;
 
     if (typeof commitment !== "string" || commitment.trim() === "") {
         return res
@@ -70,16 +67,12 @@ app.post("/api/portfolio", async (req, res) => {
             });
         }
 
-        return res.json({ ok: true });
+        return res.status(200).json({ ok: true });
     } catch (error) {
-        console.error("Proxy error while sending to webhook", error);
+        console.error("Vercel function error while sending to webhook", error);
         return res.status(502).json({
             ok: false,
             error: "Failed to reach Google Sheets webhook.",
         });
     }
-});
-
-app.listen(port, () => {
-    console.log(`Portfolio proxy listening on http://localhost:${port}`);
-});
+}
