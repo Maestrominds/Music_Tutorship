@@ -502,7 +502,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-60px" }}
                     transition={{ duration: 1, ease: EASE_OUT }}
-                    className={`relative z-10 shrink-0 flex flex-col gap-1 md:w-56 lg:w-72 ${fromLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}`}
+                    className={`relative z-10 shrink-0 flex flex-col gap-1 w-full md:w-56 lg:w-72 ${fromLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}`}
                   >
                     <span className="text-[10px] uppercase tracking-[0.45em] text-primary/80 font-sans">Month</span>
                     <span
@@ -536,7 +536,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-60px" }}
                     transition={{ duration: 1, delay: 0.2, ease: EASE_OUT }}
-                    className="relative z-10 flex-1"
+                    className="relative z-10 flex-1 w-full md:w-auto"
                   >
                     <motion.h3
                       initial={{ opacity: 0, y: 20 }}
