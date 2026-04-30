@@ -165,7 +165,6 @@ export default function Home() {
       music_link: musicLink,
       bottleneck,
       commitment,
-      submitted_at: new Date().toISOString(),
     };
 
     try {
