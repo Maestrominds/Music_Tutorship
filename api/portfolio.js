@@ -32,7 +32,9 @@ export default async function handler(req, res) {
         music_link = "",
         bottleneck = "",
         commitment = "",
-        submitted_at = new Date().toISOString(),
+        submitted_at = new Date().toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+        }),
     } = body;
 
     if (typeof commitment !== "string" || commitment.trim() === "") {
