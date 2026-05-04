@@ -124,6 +124,8 @@ export default function Home() {
 
   const [navScrolled, setNavScrolled] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
   const [commitment, setCommitment] = useState("");
   const [musicLink, setMusicLink] = useState("");
   const [bottleneck, setBottleneck] = useState("");
@@ -158,10 +160,12 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (submitting || !commitment) return;
+    if (submitting || !commitment || !name.trim() || !number.trim()) return;
     setSubmitError(null);
     setSubmitting(true);
     const formData = {
+      name,
+      number,
       music_link: musicLink,
       bottleneck,
       commitment,
@@ -344,9 +348,9 @@ export default function Home() {
             }}
           >
             {[
-              { count: 4,  label: "Months",          mobileLabel: "Months" },
-              { count: 13, label: "Students Max",    mobileLabel: "Seats" },
-              { count: 1,  label: "Official Release", mobileLabel: "Release" },
+              { count: 4, label: "Months", mobileLabel: "Months" },
+              { count: 13, label: "Students Max", mobileLabel: "Seats" },
+              { count: 1, label: "Official Release", mobileLabel: "Release" },
             ].map(({ count, label, mobileLabel }, i) => (
               <div
                 key={label}
@@ -752,7 +756,7 @@ export default function Home() {
                 className="flex items-center justify-center gap-2 py-3 rounded-lg border border-primary/30 text-primary text-xs uppercase tracking-[0.2em] font-medium transition-colors duration-300 hover:bg-primary/5"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
                 </svg>
                 Open full playlist in Spotify
               </a>
@@ -786,11 +790,11 @@ export default function Home() {
             className="grid grid-cols-2 lg:grid-cols-5 border-t border-l border-border/30 rounded-xl overflow-hidden"
           >
             {[
-              { label: "Experience",    value: "10+ Years",                              mobileValue: "10+ Years" },
-              { label: "Genres",        value: "Film · Pop · Electronic · World",        mobileValue: "Film · Pop · Electronic" },
+              { label: "Experience", value: "10+ Years", mobileValue: "10+ Years" },
+              { label: "Genres", value: "Film · Pop · Electronic · World", mobileValue: "Film · Pop · Electronic" },
               { label: "Collaborators", value: "Ghibran · Vijay Antony · D Imman · C Sathya · Vishal C", mobileValue: "Ghibran · Vijay Antony · D Imman +" },
-              { label: "Specialisation",value: "Production · Mixing · Sound Design",    mobileValue: "Production · Mixing" },
-              { label: "Philosophy",    value: "Structured. Creative. Commercially Oriented.", mobileValue: "Structured. Creative." },
+              { label: "Specialisation", value: "Production · Mixing · Sound Design", mobileValue: "Production · Mixing" },
+              { label: "Philosophy", value: "Structured. Creative. Commercially Oriented.", mobileValue: "Structured. Creative." },
             ].map(({ label, value, mobileValue }, i) => (
               <motion.div
                 key={label}
@@ -946,10 +950,59 @@ export default function Home() {
                     boxShadow: "0 0 60px rgba(234,184,46,0.08), inset 0 1px 0 rgba(255,255,255,0.05)",
                   }}
                 >
-                  {/* Step 01 — Music link */}
+                  {/* Step 01 — Name */}
                   <div className="flex flex-col text-left mb-6 sm:mb-8">
                     <div className="flex items-baseline gap-2 flex-wrap mb-3">
                       <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">01</span>
+                      <label htmlFor="full-name" className="text-[0.8rem] uppercase tracking-[0.2em] text-primary font-semibold">
+                        Full Name
+                      </label>
+                    </div>
+                    <input
+                      id="full-name"
+                      type="text"
+                      autoComplete="name"
+                      placeholder="Enter your full name"
+                      data-testid="input-name"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full bg-transparent py-3 text-sm sm:text-base text-foreground placeholder:text-white/35 outline-none focus:outline-none transition-colors duration-300"
+                      style={{ borderBottom: "1px solid rgba(255,255,255,0.30)" }}
+                      onFocus={(e) => (e.currentTarget.style.borderBottomColor = "hsl(var(--primary))")}
+                      onBlur={(e) => (e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.30)")}
+                    />
+                  </div>
+
+                  {/* Step 02 — Phone Number */}
+                  <div className="flex flex-col text-left mb-6 sm:mb-8">
+                    <div className="flex items-baseline gap-2 flex-wrap mb-3">
+                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">02</span>
+                      <label htmlFor="phone-number" className="text-[0.8rem] uppercase tracking-[0.2em] text-primary font-semibold">
+                        Phone Number
+                      </label>
+                    </div>
+                    <input
+                      id="phone-number"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="Your best contact number"
+                      data-testid="input-number"
+                      required
+                      value={number}
+                      onChange={(e) => setNumber(e.target.value)}
+                      className="w-full bg-transparent py-3 text-sm sm:text-base text-foreground placeholder:text-white/35 outline-none focus:outline-none transition-colors duration-300"
+                      style={{ borderBottom: "1px solid rgba(255,255,255,0.30)" }}
+                      onFocus={(e) => (e.currentTarget.style.borderBottomColor = "hsl(var(--primary))")}
+                      onBlur={(e) => (e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.30)")}
+                    />
+                  </div>
+
+                  {/* Step 01 — Music link */}
+                  <div className="flex flex-col text-left mb-6 sm:mb-8">
+                    <div className="flex items-baseline gap-2 flex-wrap mb-3">
+                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">03</span>
                       <label htmlFor="music-link" className="text-[0.8rem] uppercase tracking-[0.2em] text-primary font-semibold">
                         Music Link
                       </label>
@@ -977,7 +1030,7 @@ export default function Home() {
                   {/* Step 02 — Bottleneck */}
                   <div className="flex flex-col text-left mb-6 sm:mb-8">
                     <div className="flex items-baseline gap-2 mb-3">
-                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">02</span>
+                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">04</span>
                       <label htmlFor="bottleneck" className="text-[0.8rem] uppercase tracking-[0.2em] text-primary font-semibold">
                         Your Bottleneck
                       </label>
@@ -1003,7 +1056,7 @@ export default function Home() {
                   {/* Step 03 — Financial Commitment */}
                   <div className="flex flex-col text-left mb-6 sm:mb-8">
                     <div className="flex items-baseline gap-2 mb-3">
-                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">03</span>
+                      <span className="text-[0.6rem] text-primary/40 font-mono tracking-widest">05</span>
                       <label className="text-[0.8rem] uppercase tracking-[0.2em] text-primary font-semibold">
                         Financial Commitment
                       </label>
@@ -1017,8 +1070,8 @@ export default function Home() {
                     >
                       {[
                         { value: "ready", label: "I understand this requires an investment of ₹1,59,000, and I have the capital ready if accepted." },
-                        { value: "plan",  label: "I am highly interested but would need to discuss payment plan options." },
-                        { value: "no",    label: "I cannot commit to this financial level at this time." },
+                        { value: "plan", label: "I am highly interested but would need to discuss payment plan options." },
+                        { value: "no", label: "I cannot commit to this financial level at this time." },
                       ].map(({ value, label }, idx, arr) => {
                         const selected = commitment === value;
                         const isLast = idx === arr.length - 1;

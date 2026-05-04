@@ -29,6 +29,8 @@ export default async function handler(req, res) {
               })();
 
     const {
+        name = "",
+        number = "",
         music_link = "",
         bottleneck = "",
         commitment = "",
@@ -36,6 +38,18 @@ export default async function handler(req, res) {
             timeZone: "Asia/Kolkata",
         }),
     } = body;
+
+    if (typeof name !== "string" || name.trim() === "") {
+        return res
+            .status(400)
+            .json({ ok: false, error: "name is required." });
+    }
+
+    if (typeof number !== "string" || number.trim() === "") {
+        return res
+            .status(400)
+            .json({ ok: false, error: "number is required." });
+    }
 
     if (typeof commitment !== "string" || commitment.trim() === "") {
         return res
@@ -45,6 +59,8 @@ export default async function handler(req, res) {
 
     try {
         const formData = new URLSearchParams({
+            name: String(name),
+            number: String(number),
             music_link: String(music_link),
             bottleneck: String(bottleneck),
             commitment: String(commitment),
